@@ -22,6 +22,13 @@ git clone https://github.com/yourusername/githubdownloadcount-go.git
 cd githubdownloadcount-go
 go build -o githubdownloadcount
 ```
+To create binaries for various platforms:
+
+* Look at `platforms.txt` and uncomment platforms of your choice, then type:
+
+```bash
+./go-xbuild.sh
+```
 
 ## Usage
 
