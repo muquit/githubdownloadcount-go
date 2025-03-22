@@ -1,11 +1,5 @@
 package main
 
-/////////////////////////////////////////////////////////////////////
-// Print githup download counts of pojects with Releases
-// Developed with Claude AI 3.7 Sonnet, working under my guidance and
-// instructions.
-// muquit@muquit.com Mar-21-2025
-/////////////////////////////////////////////////////////////////////
 import (
 	"encoding/json"
 	"flag"
@@ -14,12 +8,21 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 )
 
+/////////////////////////////////////////////////////////////////////
+// Print githup download counts of pojects with Releases
+// Developed with Claude AI 3.7 Sonnet, working under my guidance and
+// instructions.
+// muquit@muquit.com Mar-21-2025
+/////////////////////////////////////////////////////////////////////
+
 const (
-	version      = "1.01"
-	githubAPIURL = "https://api.github.com/repos/"
-	userAgent    = "githubdownloadcount"
+	version        = "1.0.1"
+	githubAPIURL   = "https://api.github.com/repos/"
+	userAgent      = "githubdownloadcount"
+	generationDate = "Mar-21-2025" // Generated on date
 )
 
 type Asset struct {
@@ -36,15 +39,20 @@ func main() {
 	var user string
 	var project string
 	var markdown bool
+	var showVersion bool
+	var verbose bool
 
 	flag.StringVar(&user, "user", "", "Name of the github user")
 	flag.StringVar(&project, "project", "", "Name of the github project")
 	flag.BoolVar(&markdown, "markdown", false, "Output as markdown table")
+	flag.BoolVar(&showVersion, "version", false, "Show version information")
+	flag.BoolVar(&verbose, "verbose", false, "Show verbose output including URL")
 
 	// Custom usage function to mimic Optimist's help format
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "%s v%s\n", os.Args[0], version)
 		fmt.Fprintf(os.Stderr, "A script to display github download count for a project\n")
+		fmt.Fprintf(os.Stderr, "Generated on: %s\n", generationDate)
 		fmt.Fprintf(os.Stderr, "Usage: %s options\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, "Where the options are:\n")
 		flag.PrintDefaults()
@@ -52,21 +60,31 @@ func main() {
 
 	flag.Parse()
 
+	// Show version if requested
+	if showVersion {
+		fmt.Printf("%s v%s\n", os.Args[0], version)
+		fmt.Printf("Generated on: %s\n", generationDate)
+		os.Exit(0)
+	}
+
 	// Check for required arguments
 	if user == "" || project == "" {
-		log.Fatal("Error: Missing required arguments. Both --user and --project are required.")
+		fmt.Fprintf(os.Stderr, "Error: Missing required arguments. Both --user and --project are required.\n")
 		flag.Usage()
 		os.Exit(1)
 	}
 
-	exitCode := showDownloadCounts(user, project, markdown)
+	exitCode := showDownloadCounts(user, project, markdown, verbose)
 	os.Exit(exitCode)
 }
 
-func showDownloadCounts(user, project string, markdown bool) int {
+func showDownloadCounts(user, project string, markdown bool, verbose bool) int {
 	url := githubAPIURL + user + "/" + project + "/releases"
 
-	fmt.Printf("url: %s\n", url)
+	// Only print URL in non-markdown mode and when verbose flag is set
+	if verbose && !markdown {
+		fmt.Printf("url: %s\n", url)
+	}
 
 	// Create a new request
 	req, err := http.NewRequest("GET", url, nil)
@@ -117,8 +135,12 @@ func showDownloadCounts(user, project string, markdown bool) int {
 	// Track total downloads
 	totalDownloads := 0
 
+	// Get current date for "Generated on" text
+	currentTime := time.Now().Format("Jan-02-2006")
+
 	// Display download counts
 	if markdown {
+		fmt.Println("\n# Download Counts\n")
 		fmt.Println("| File | Downloads |")
 		fmt.Println("| ---- | --------- |")
 		for _, release := range releases {
@@ -127,6 +149,10 @@ func showDownloadCounts(user, project string, markdown bool) int {
 				totalDownloads += asset.DownloadCount
 			}
 		}
+		// Add Generated on info as part of the markdown table
+		fmt.Printf("\n---\n")
+		fmt.Printf("\n_Generated on: %s_\n", currentTime)
+		fmt.Printf("\nGenerated with: https://github.com/muquit/githubdownloadcount-go\n\n")
 	} else {
 		for _, release := range releases {
 			for _, asset := range release.Assets {
@@ -134,6 +160,8 @@ func showDownloadCounts(user, project string, markdown bool) int {
 				totalDownloads += asset.DownloadCount
 			}
 		}
+		fmt.Printf("\nGenerated on: %s\n", currentTime)
+		fmt.Printf("\nGenerated with: https://github.com/muquit/githubdownloadcount-go\n\n")
 	}
 
 	// Return exit code based on download count
