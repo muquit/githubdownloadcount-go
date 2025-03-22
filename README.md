@@ -87,7 +87,7 @@ Sample output:
 This allows for easy integration with scripts:
 
 ```bash
-./githubdownloadcount --user=muquit --project=mailsend-go
+./githubdownloadcount-go --user=muquit --project=mailsend-go
 if [ $? -eq 0 ]; then
     echo "Downloads found!"
 else
