@@ -60,13 +60,13 @@ Where the options are:
 Basic usage:
 
 ```bash
-./githubdownloadcount --user=muquit --project=mailsend-go
+./githubdownloadcount-go --user=muquit --project=mailsend-go
 ```
 
 Output as markdown table:
 
 ```bash
-./githubdownloadcount --user=muquit --project=mailsend-go --markdown
+./githubdownloadcount-go --user=muquit --project=mailsend-go --markdown
 ```
 
 Sample output:
