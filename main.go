@@ -45,12 +45,12 @@ func main() {
 	flag.StringVar(&project, "project", "", "Name of the github project")
 	flag.BoolVar(&markdown, "markdown", false, "Output as markdown table")
 	flag.BoolVar(&showVersion, "version", false, "Show version information")
-	flag.BoolVar(&verbose, "verbose", false, "Show verbose output including URL")
+	flag.BoolVar(&verbose, "verbose", false, "Show verbose output including API URL (!markdown)")
 
 	// Custom usage function to mimic Optimist's help format
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "%s v%s\n", os.Args[0], version)
-		fmt.Fprintf(os.Stderr, "A script to display github download count for a project\n")
+		fmt.Fprintf(os.Stderr, "A program to display github download count for a project\n")
 		fmt.Fprintf(os.Stderr, "Usage: %s options\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, "Where the options are:\n")
 		flag.PrintDefaults()
@@ -147,8 +147,8 @@ func showDownloadCounts(user, project string, markdown bool, verbose bool) int {
 			}
 		}
 		// Add horizontal rule, generation date and tool info
-		fmt.Println("---\n")
-		fmt.Printf("*Generated on: %s*  \n", currentTime)
+		fmt.Println("\n---\n")
+		fmt.Printf("Generated on: %s  \n", currentTime)
 		fmt.Println("Generated with: https://github.com/muquit/githubdownloadcount-go\n")
 	} else {
 		for _, release := range releases {
@@ -169,4 +169,3 @@ func showDownloadCounts(user, project string, markdown bool, verbose bool) int {
 	fmt.Println("No downloads found")
 	return 1 // No downloads found
 }
-

@@ -2,7 +2,8 @@
 
 A simple tool to display download counts for GitHub release assets. This tool allows you to easily track how many times your GitHub release assets have been downloaded and can generate output in both plain text and markdown table format.
 
-This tool is a Go port of my original Ruby script `github-download-count` 
+This tool is a Go port of my original Ruby script 
+[github-download-count](https://github.com/muquit/githubdownloadcount)
 with enhancements for improved error handling and markdown output.
 
 ## Features
