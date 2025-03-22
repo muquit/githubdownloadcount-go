@@ -19,10 +19,9 @@ import (
 /////////////////////////////////////////////////////////////////////
 
 const (
-	version        = "1.0.1"
-	githubAPIURL   = "https://api.github.com/repos/"
-	userAgent      = "githubdownloadcount"
-	generationDate = "Mar-21-2025" // Generated on date
+	version      = "1.0.1"
+	githubAPIURL = "https://api.github.com/repos/"
+	userAgent    = "githubdownloadcount"
 )
 
 type Asset struct {
@@ -52,7 +51,6 @@ func main() {
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "%s v%s\n", os.Args[0], version)
 		fmt.Fprintf(os.Stderr, "A script to display github download count for a project\n")
-		fmt.Fprintf(os.Stderr, "Generated on: %s\n", generationDate)
 		fmt.Fprintf(os.Stderr, "Usage: %s options\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, "Where the options are:\n")
 		flag.PrintDefaults()
@@ -63,7 +61,6 @@ func main() {
 	// Show version if requested
 	if showVersion {
 		fmt.Printf("%s v%s\n", os.Args[0], version)
-		fmt.Printf("Generated on: %s\n", generationDate)
 		os.Exit(0)
 	}
 
@@ -140,7 +137,7 @@ func showDownloadCounts(user, project string, markdown bool, verbose bool) int {
 
 	// Display download counts
 	if markdown {
-		fmt.Println("\n# Download Counts\n")
+		fmt.Println("# Download Counts")
 		fmt.Println("| File | Downloads |")
 		fmt.Println("| ---- | --------- |")
 		for _, release := range releases {
@@ -149,10 +146,10 @@ func showDownloadCounts(user, project string, markdown bool, verbose bool) int {
 				totalDownloads += asset.DownloadCount
 			}
 		}
-		// Add Generated on info as part of the markdown table
-		fmt.Printf("\n---\n")
-		fmt.Printf("\n_Generated on: %s_\n", currentTime)
-		fmt.Printf("\nGenerated with: https://github.com/muquit/githubdownloadcount-go\n\n")
+		// Add horizontal rule, generation date and tool info
+		fmt.Println("---\n")
+		fmt.Printf("*Generated on: %s*  \n", currentTime)
+		fmt.Println("Generated with: https://github.com/muquit/githubdownloadcount-go\n")
 	} else {
 		for _, release := range releases {
 			for _, asset := range release.Assets {
@@ -161,7 +158,7 @@ func showDownloadCounts(user, project string, markdown bool, verbose bool) int {
 			}
 		}
 		fmt.Printf("\nGenerated on: %s\n", currentTime)
-		fmt.Printf("\nGenerated with: https://github.com/muquit/githubdownloadcount-go\n\n")
+		fmt.Println("Generated with: https://github.com/muquit/githubdownloadcount-go\n")
 	}
 
 	// Return exit code based on download count
@@ -172,3 +169,4 @@ func showDownloadCounts(user, project string, markdown bool, verbose bool) int {
 	fmt.Println("No downloads found")
 	return 1 // No downloads found
 }
+
