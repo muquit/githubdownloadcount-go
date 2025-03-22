@@ -40,12 +40,19 @@ To create binaries for various platforms:
 ### Options
 
 ```
+A program to display github download count for a project
+Usage: ./githubdownloadcount-go options
+Where the options are:
   -markdown
-        Output as markdown table
+    	Output as markdown table
   -project string
-        Name of the github project (required)
+    	Name of the github project
   -user string
-        Name of the github user (required)
+    	Name of the github user
+  -verbose
+    	Show verbose output including API URL (!markdown)
+  -version
+    	Show version information
 ```
 
 ### Examples
