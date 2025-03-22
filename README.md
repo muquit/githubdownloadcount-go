@@ -33,7 +33,7 @@ To create binaries for various platforms:
 ## Usage
 
 ```bash
-./githubdownloadcount --user=username --project=projectname [options]
+./githubdownloadcount-go --user=username --project=projectname [options]
 ```
 
 ### Options
