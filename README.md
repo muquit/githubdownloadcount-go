@@ -52,8 +52,6 @@ Where the options are:
     	Name of the github project
   -user string
     	Name of the github user
-  -verbose
-    	Show verbose output including API URL (!markdown)
   -version
     	Show version information
 ```

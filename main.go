@@ -19,9 +19,9 @@ import (
 /////////////////////////////////////////////////////////////////////
 
 const (
-	version      = "1.0.1"
+	version      = "1.0.3"
 	githubAPIURL = "https://api.github.com/repos/"
-	userAgent    = "githubdownloadcount"
+	userAgent    = "githubdownloadcount-go"
 )
 
 type Asset struct {
@@ -39,13 +39,11 @@ func main() {
 	var project string
 	var markdown bool
 	var showVersion bool
-	var verbose bool
 
 	flag.StringVar(&user, "user", "", "Name of the github user")
 	flag.StringVar(&project, "project", "", "Name of the github project")
 	flag.BoolVar(&markdown, "markdown", false, "Output as markdown table")
 	flag.BoolVar(&showVersion, "version", false, "Show version information")
-	flag.BoolVar(&verbose, "verbose", false, "Show verbose output including API URL (!markdown)")
 
 	// Custom usage function to mimic Optimist's help format
 	flag.Usage = func() {
@@ -71,17 +69,15 @@ func main() {
 		os.Exit(1)
 	}
 
-	exitCode := showDownloadCounts(user, project, markdown, verbose)
+	exitCode := showDownloadCounts(user, project, markdown)
 	os.Exit(exitCode)
 }
 
-func showDownloadCounts(user, project string, markdown bool, verbose bool) int {
+func showDownloadCounts(user, project string, markdown bool) int {
 	url := githubAPIURL + user + "/" + project + "/releases"
 
-	// Only print URL in non-markdown mode and when verbose flag is set
-	if verbose && !markdown {
-		fmt.Printf("url: %s\n", url)
-	}
+	// Always print URL regardless of mode
+	fmt.Printf("API URL: %s\n\n", url)
 
 	// Create a new request
 	req, err := http.NewRequest("GET", url, nil)
@@ -146,6 +142,11 @@ func showDownloadCounts(user, project string, markdown bool, verbose bool) int {
 				totalDownloads += asset.DownloadCount
 			}
 		}
+		// Add total downloads row
+		if len(releases) > 0 {
+			fmt.Printf("\n**Total Downloads: %d**\n\n", totalDownloads)
+			fmt.Printf("**API Link**: [%s](%s)\n", url, url)
+		}
 		// Add horizontal rule, generation date and tool info
 		fmt.Println("\n---\n")
 		fmt.Printf("Generated on: %s  \n", currentTime)
@@ -156,6 +157,9 @@ func showDownloadCounts(user, project string, markdown bool, verbose bool) int {
 				fmt.Printf("%s %d\n", asset.Name, asset.DownloadCount)
 				totalDownloads += asset.DownloadCount
 			}
+		}
+		if len(releases) > 0 {
+			fmt.Printf("\nTotal Downloads: %d\n", totalDownloads)
 		}
 		fmt.Printf("\nGenerated on: %s\n", currentTime)
 		fmt.Println("Generated with: https://github.com/muquit/githubdownloadcount-go\n")
@@ -169,3 +173,4 @@ func showDownloadCounts(user, project string, markdown bool, verbose bool) int {
 	fmt.Println("No downloads found")
 	return 1 // No downloads found
 }
+
