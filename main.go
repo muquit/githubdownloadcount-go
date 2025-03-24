@@ -8,6 +8,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -19,9 +21,12 @@ import (
 /////////////////////////////////////////////////////////////////////
 
 const (
-	version      = "1.0.3"
-	githubAPIURL = "https://api.github.com/repos/"
-	userAgent    = "githubdownloadcount-go"
+	version        = "1.0.3"
+	githubAPIURL   = "https://api.github.com/repos/"
+	userAgent      = "githubdownloadcount-go"
+	smallSpanStart = "<span style=\"font-size: 0.8em; color: gray;\">"
+	smallSpanEnd   = "</span>"
+	myUrl          = "https://github.com/muquit/githubdownloadcount-go"
 )
 
 type Asset struct {
@@ -71,6 +76,29 @@ func main() {
 
 	exitCode := showDownloadCounts(user, project, markdown)
 	os.Exit(exitCode)
+}
+
+// by Claude
+func formatNumber(n int) string {
+	// Convert the number to a string
+	str := strconv.Itoa(n)
+
+	// If the number is less than 1000, no formatting needed
+	if len(str) <= 3 {
+		return str
+	}
+
+	// Start from the end and work backwards
+	var result strings.Builder
+	for i, char := range str {
+		// Add comma every 3 digits from the right
+		if i > 0 && (len(str)-i)%3 == 0 {
+			result.WriteRune(',')
+		}
+		result.WriteRune(char)
+	}
+
+	return result.String()
 }
 
 func showDownloadCounts(user, project string, markdown bool) int {
@@ -144,13 +172,12 @@ func showDownloadCounts(user, project string, markdown bool) int {
 		}
 		// Add total downloads row
 		if len(releases) > 0 {
-			fmt.Printf("\n**Total Downloads: %d**\n\n", totalDownloads)
-			fmt.Printf("**API Link**: [%s](%s)\n", url, url)
+			fs := formatNumber(totalDownloads)
+			fmt.Printf("\n%sTotal Downloads: %s%s  \n", smallSpanStart, fs, smallSpanEnd)
+			fmt.Printf("%sGenerated on: %s%s  \n", smallSpanStart, currentTime, smallSpanEnd)
+			fmt.Printf("%sAPI Link: [%s](%s)%s  \n", smallSpanStart, url, url, smallSpanEnd)
+			fmt.Printf("%sGenerated with: %s%s  \n", smallSpanStart, myUrl, smallSpanEnd)
 		}
-		// Add horizontal rule, generation date and tool info
-		fmt.Println("\n---\n")
-		fmt.Printf("Generated on: %s  \n", currentTime)
-		fmt.Println("Generated with: https://github.com/muquit/githubdownloadcount-go\n")
 	} else {
 		for _, release := range releases {
 			for _, asset := range release.Assets {
