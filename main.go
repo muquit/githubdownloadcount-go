@@ -77,7 +77,7 @@ func showDownloadCounts(user, project string, markdown bool) int {
 	url := githubAPIURL + user + "/" + project + "/releases"
 
 	// Always print URL regardless of mode
-	fmt.Printf("API URL: %s\n\n", url)
+	//	fmt.Printf("API URL: %s\n\n", url)
 
 	// Create a new request
 	req, err := http.NewRequest("GET", url, nil)
@@ -173,4 +173,3 @@ func showDownloadCounts(user, project string, markdown bool) int {
 	fmt.Println("No downloads found")
 	return 1 // No downloads found
 }
-
