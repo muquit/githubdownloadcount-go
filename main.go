@@ -21,11 +21,13 @@ import (
 /////////////////////////////////////////////////////////////////////
 
 const (
-	version        = "1.0.3"
-	githubAPIURL   = "https://api.github.com/repos/"
-	userAgent      = "githubdownloadcount-go"
-	smallSpanStart = "<span style=\"font-size: 0.8em; color: gray;\">"
-	smallSpanEnd   = "</span>"
+	version      = "1.0.3"
+	githubAPIURL = "https://api.github.com/repos/"
+	userAgent    = "githubdownloadcount-go"
+	//	smallSpanStart = "<span style=\"font-size: 0.8em; color: gray;\">"
+	//	smallSpanEnd   = "</span>"
+	smallSpanStart = "<sub>"
+	smallSpanEnd   = "</sub>"
 	myUrl          = "https://github.com/muquit/githubdownloadcount-go"
 )
 
@@ -176,7 +178,7 @@ func showDownloadCounts(user, project string, markdown bool) int {
 			fmt.Printf("\n%sTotal Downloads: %s%s  \n", smallSpanStart, fs, smallSpanEnd)
 			fmt.Printf("%sGenerated on: %s%s  \n", smallSpanStart, currentTime, smallSpanEnd)
 			fmt.Printf("%sAPI Link: [%s](%s)%s  \n", smallSpanStart, url, url, smallSpanEnd)
-			fmt.Printf("%sGenerated with: %s%s  \n", smallSpanStart, myUrl, smallSpanEnd)
+			fmt.Printf("%sGenerated with: %s%s  \n\n", smallSpanStart, myUrl, smallSpanEnd)
 		}
 	} else {
 		for _, release := range releases {
