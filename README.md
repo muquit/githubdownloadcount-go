@@ -29,9 +29,12 @@ To create binaries for various platforms:
 
 ```bash
 ./go-xbuild.sh
+or
+g-xbuild-go
 ```
 
-Please have a look at [go-xbuild](https://github.com/muquit/go-xbuild) to cross compile Go projects without
+Please have a look at [go-xbuild](https://github.com/muquit/go-xbuild) 
+or [go-xbuild-go](https://github.com/muquit/go-xbuild-go) to cross compile Go projects without
 pain.
 
 ## Usage
