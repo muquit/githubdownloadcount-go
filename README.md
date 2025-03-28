@@ -30,7 +30,7 @@ To create binaries for various platforms:
 ```bash
 ./go-xbuild.sh
 or
-g-xbuild-go
+go-xbuild-go
 ```
 
 Please have a look at [go-xbuild](https://github.com/muquit/go-xbuild) 
